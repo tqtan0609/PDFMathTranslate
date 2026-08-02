@@ -219,6 +219,9 @@ Ba biến có thể dùng trong file prompt:
 
 ## 7. File cấu hình cố định (config.json)
 
+> **File thật của cá nhân:** `custom/config/config_gemini.json` (đã gitignore vì chứa API key thật —
+> xem `custom/README.md`). Ví dụ `config.json` dưới đây chỉ minh hoạ cú pháp chung.
+
 Thay vì `export` biến môi trường mỗi lần, có thể lưu sẵn API key/model vào file JSON:
 
 ```bash
@@ -389,12 +392,12 @@ Tuy nhiên với tài liệu **rất dài (300-500+ trang)**, nên chủ động
 
 ### 13.2 Cách chunk (tách PDF vật lý)
 
-Dùng script `scripts/split_pdf.py` (chỉ cần `pymupdf`, đã có sẵn trong `.venv` vì là dependency của `pdf2zh`):
+Dùng script `custom/scripts/split_pdf.py` (chỉ cần `pymupdf`, đã có sẵn trong `.venv` vì là dependency của `pdf2zh`):
 
 ```bash
 cd /home/tantq/Apps/PDFMathTranslate
 source .venv/bin/activate
-python scripts/split_pdf.py document.pdf 100 chunks/
+python custom/scripts/split_pdf.py document.pdf 100 chunks/
 # → chunks/chunk_001_p1-100.pdf, chunk_002_p101-200.pdf, ...
 ```
 
@@ -411,7 +414,7 @@ for f in chunks/*.pdf; do
         continue
     fi
     echo "Đang dịch $name..."
-    pdf2zh "$f" --config config_gemini.json --prompt prompt_vi.txt -o "$out" -t 1
+    pdf2zh "$f" --config custom/config/config_gemini.json --prompt custom/prompts/prompt_vi.txt -o "$out" -t 1
 done
 ```
 
@@ -420,10 +423,10 @@ done
 
 ### 13.4 Ghép lại
 
-Dùng script `scripts/merge_pdf.py`:
+Dùng script `custom/scripts/merge_pdf.py`:
 
 ```bash
-python scripts/merge_pdf.py "translated/*/chunk_*-mono.pdf" document-vi-full.pdf
+python custom/scripts/merge_pdf.py "translated/*/chunk_*-mono.pdf" document-vi-full.pdf
 ```
 
 `glob` + `sorted()` đảm bảo ghép đúng thứ tự nhờ tên chunk có số thứ tự zero-padded (`chunk_001`, `chunk_002`...). Đổi pattern sang `*-dual.pdf` nếu muốn ghép bản song ngữ thay vì bản chỉ tiếng Việt.

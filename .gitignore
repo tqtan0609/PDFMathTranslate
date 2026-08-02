@@ -135,7 +135,6 @@ celerybeat.pid
 
 # Environments
 .env
-config_*.json
 .venv
 env/
 venv/
@@ -179,3 +178,7 @@ cython_debug/
 uv.lock
 *.pdf
 *.docx
+
+# Personal customization workspace (see custom/README.md) —
+# per-model configs hold real API keys and must never be committed.
+custom/config/*.json

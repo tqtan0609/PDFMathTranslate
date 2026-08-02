@@ -10,11 +10,23 @@ a Flask/Celery HTTP backend, and an MCP server. This is the stable v1.x fork (`B
 separate, more actively developed fork with additional features lives at `PDFMathTranslate/PDFMathTranslate-next`
 (referenced here only as an optional git submodule, see "Kernel abstraction" below).
 
-This working copy also has local additions on top of upstream that are not part of the public project:
-`HUONG_DAN_SU_DUNG.md` (Vietnamese usage notes for this specific install), `config.json` / `config_gemini.json`
-/ `prompt_vi.txt` (fixed run configs and a custom glossary prompt for Vietnamese translation), and
-`scripts/split_pdf.py` / `scripts/merge_pdf.py` (chunk a large PDF before translation, then reassemble the
-translated chunks). Keep these in mind when the user references "the usual workflow" — they're describing a
+This working copy also has local additions on top of upstream that are not part of the public project, all
+kept under `custom/` (see `custom/README.md` for the full index) to avoid mixing with upstream files —
+notably to avoid clashing with the pre-existing upstream `script/` (singular) directory of build/packaging
+tooling, which is unrelated:
+
+- `custom/docs/HUONG_DAN_SU_DUNG.md` — Vietnamese usage guide for this specific install.
+- `custom/prompts/prompt_vi.txt` — custom LLM prompt (glossary/style) passed via `--prompt`.
+- `custom/config/config_gemini.json` — per-model run config passed via `--config`; **gitignored**
+  (`custom/config/*.json` is ignored as a whole) because it holds a real API key.
+- `custom/scripts/split_pdf.py` / `custom/scripts/merge_pdf.py` — chunk a large PDF before translation,
+  then reassemble the translated chunks.
+
+Also present but unrelated to this customization layer: `source/` (a scratch dropbox for input documents
+the user is translating — its contents are already excluded by the repo-wide `*.pdf`/`*.docx` ignore rules,
+not by anything `custom/`-specific) and `app.json` (an upstream Heroku deploy descriptor, untouched).
+
+Keep all of this in mind when the user references "the usual workflow" — they're describing a
 Vietnamese-translation setup layered on the generic tool.
 
 ## Common commands
